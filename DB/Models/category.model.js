@@ -1,49 +1,44 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from "mongoose";
 
 const categorySchema = new Schema(
   {
     name: {
       type: String,
+      required: true,
       unique: true,
       lowercase: true,
-      required: true,
     },
     slug: {
       type: String,
-      unique: true,
       lowercase: true,
-      required: true,
-    },
-    Image: {
-      secure_url: {
-        type: String,
-        required: true,
-      },
-      public_id: {
-        type: String,
-        required: true,
-      },
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: false, // TODO: convert into true after creating usermodel
+      type: Types.ObjectId,
+      required: true,
+      ref: "user",
     },
-    customId: String,
+    Images: {
+      public_id: {
+        required: true,
+        type: String,
+      },
+      secure_url: {
+        required: true,
+        type: String,
+      },
+    },
+    customId: {
+      type: String,
+      unique: true,
+    },
+    updatedBy: {
+      type: Types.ObjectId,
+      ref: "user",
+    },
   },
-  {
-    toObject: { virtuals: true }, // for res.json()
-    toJSON: { virtuals: true }, // for console.log()
-    timestamps: true,
-  },
-)
+  { timestamps: true }
+);
 
-//======================================== Vitruals ========================================
-categorySchema.virtual('subCategories', {
-  ref: 'subCategory',
-  foreignField: 'categoryId',
-  localField: '_id',
-  // justOne: true,
-})
+const categoryModel = model("category", categorySchema);
 
-export const categoryModel = model('Category', categorySchema)
+export default categoryModel;

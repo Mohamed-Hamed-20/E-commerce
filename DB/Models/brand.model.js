@@ -1,48 +1,48 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from "mongoose";
 
 const brandSchema = new Schema(
   {
     name: {
       type: String,
-      lowercase: true,
       required: true,
+      lowecase: true,
     },
     slug: {
       type: String,
-      unique: true,
-      lowercase: true,
-      required: true,
     },
-    logo: {
-      secure_url: {
-        type: String,
-        required: true,
-      },
-      public_id: {
-        type: String,
-        required: true,
-      },
+    customId: {
+      type: String,
+      unique: true,
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: false, // TODO: convert into true after creating usermodel
-    },
-    subCategoryId: {
-      type: Schema.Types.ObjectId,
-      ref: 'subCategory',
+      type: Types.ObjectId,
       required: true,
+      ref: "user",
+    },
+    logo: {
+      public_id: {
+        required: true,
+        type: String,
+      },
+      secure_url: {
+        required: true,
+        type: String,
+      },
     },
     categoryId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Category',
+      type: Types.ObjectId,
       required: true,
+      ref: "category",
     },
-    customId: String,
+    subCategoryId: {
+      type: Types.ObjectId,
+      required: true,
+      ref: "subcategory",
+    },
   },
-  {
-    timestamps: true,
-  },
-)
+  { timestamps: true }
+);
 
-export const brandModel = model('Brand', brandSchema)
+const brandModel = model("brand", brandSchema);
+
+export default brandModel;

@@ -1,22 +1,38 @@
-import { Router } from 'express'
-import * as sc from './subCategory.controller.js'
-import { multerCloudFunction } from '../../services/multerCloud.js'
-import { allowedExtensions } from '../../utils/allowedExtensions.js'
-import { asyncHandler } from '../../utils/errorhandling.js'
-import * as validators from './subCategory.validationSchemas.js'
-import { validationCoreFunction } from '../../middlewares/validation.js'
-
-const router = Router({ mergeParams: true })
+import { Router } from "express";
+import * as sc from "./controller/subcategory.js";
+import { multerCloudFunction } from "../../utils/multerCloud.js";
+import { allowedExtensions } from "../../utils/allowedExtensions.js";
+import { authentication } from "../../middleware/authentication.js";
+import { authorization } from "../../middleware/authorization.js";
+import { valid } from "../../middleware/validation.js";
+import * as vc from "./controller/Subcategory.valid.schema.js";
+const router = Router();
 
 router.post(
-  '/',
-  multerCloudFunction(allowedExtensions.Image).single('image'),
-  validationCoreFunction(validators.createSubCategorySchema),
-  asyncHandler(sc.createSubCategory),
-)
+  "/CreateSubCategory",
+  authentication,
+  authorization(["superAdmin", "admin"]),
+  multerCloudFunction(allowedExtensions.Image).single("ImgSubCategory"),
+  valid(vc.CreateSubCategory),
+  sc.CreateSubCategory
+);
 
-router.get('/', asyncHandler(sc.getAllSubCategories))
-
-export default router
-
-//  /category/:categoryId  => subCategoryRouter
+router.put(
+  "/update",
+  authentication,
+  authorization(["superAdmin", "admin"]),
+  multerCloudFunction(allowedExtensions.Image).single("ImgSubCategory"),
+  valid(vc.Update_SubCategory),
+  sc.Update_SubCategory
+);
+router.get("/GetallSubCategory", sc.GetallSubCategory);
+router.delete(
+  "/delete",
+  authentication,
+  authorization(["superAdmin", "admin"]),
+  multerCloudFunction(allowedExtensions.Image).single("ImgSubCategory"),
+  valid(vc.delete_SubCategory),
+  sc.delete_SubCategory
+);
+router.get("/searchsubCategory", sc.searchsubCategory);
+export default router;

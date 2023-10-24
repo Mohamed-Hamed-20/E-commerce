@@ -1,25 +1,33 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from "mongoose";
 
 const productSchema = new Schema(
   {
-    // ======= Text section =======
     title: {
       type: String,
+      lowecase: true,
       required: true,
-      lowercase: true,
     },
-    desc: String,
     slug: {
       type: String,
+      lowecase: true,
       required: true,
-      lowercase: true,
     },
-
-    // ======= Specifications section =======
-    colors: [String],
-    sizes: [String],
-
-    // ======= Price section =======
+    desc: {
+      type: String,
+    },
+    customId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    color: [{
+      type: String,
+      required: true,
+    }],
+    size: [{
+      type: String,
+      required: true,
+    }],
     price: {
       type: Number,
       required: true,
@@ -33,60 +41,55 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
-
-    // ======= Quantity section =======
     stock: {
       type: Number,
       required: true,
       default: 1,
     },
-
-    // ======= Related Ids section =======
     createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: false, // TODO: convert into true after creating usermodel
-    },
-    updatedBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    deletedBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    categoryId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Category',
+      type: Types.ObjectId,
       required: true,
+      ref: "user",
     },
-    subCategoryId: {
-      type: Schema.Types.ObjectId,
-      ref: 'subCategory',
-      required: true,
+    updateBy: {
+      type: Types.ObjectId,
+      ref: "user",
     },
-    brandId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Brand',
-      required: true,
+    deleteBy: {
+      type: Types.ObjectId,
+      ref: "user",
     },
-
-    // ======= Images section =======
-    Images: [
+    Imges: [
       {
-        secure_url: {
-          type: String,
-          required: true,
-        },
         public_id: {
-          type: String,
           required: true,
+          type: String,
+        },
+        secure_url: {
+          required: true,
+          type: String,
         },
       },
     ],
-    customId: String,
+    categoryId: {
+      type: Types.ObjectId,
+      required: true,
+      ref: "category",
+    },
+    subCategoryId: {
+      type: Types.ObjectId,
+      required: true,
+      ref: "subcategory",
+    },
+    brandId: {
+      type: Types.ObjectId,
+      required: true,
+      ref: "brand",
+    },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
 
-export const productModel = model('Product', productSchema)
+const productModel = model("product", productSchema);
+
+export default productModel;

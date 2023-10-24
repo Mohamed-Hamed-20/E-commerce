@@ -1,13 +1,10 @@
-import express from 'express'
+import express from "express";
+import { bootstrap } from "./src/index.routes.js";
+const app = express();
 
-import { config } from 'dotenv'
-import path from 'path'
-import { initiateApp } from './src/utils/initiateApp.js'
-config({ path: path.resolve('./config/config.env') })
+//connect with config.env
+import dotenv from "dotenv";
+dotenv.config({ path: "./config/config.env" });
+//application
 
-const app = express()
-
-initiateApp(app, express)
-
-
-
+bootstrap(app, express);

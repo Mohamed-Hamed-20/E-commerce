@@ -1,53 +1,49 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from "mongoose";
 
-const subCategorySchema = new Schema(
+const SubCategorySchema = new Schema(
   {
     name: {
       type: String,
-      unique: true,
-      lowercase: true,
       required: true,
+      unique: true,
+      lowecase: true,
     },
     slug: {
       type: String,
-      unique: true,
-      lowercase: true,
-      required: true,
-    },
-    Image: {
-      secure_url: {
-        type: String,
-        required: true,
-      },
-      public_id: {
-        type: String,
-        required: true,
-      },
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: false, // TODO: convert into true after creating usermodel
+      type: Types.ObjectId,
+      required: true,
+      ref: "user",
+    },
+    Images: {
+      public_id: {
+        required: true,
+        type: String,
+      },
+      secure_url: {
+        required: true,
+        type: String,
+      },
     },
     categoryId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Category',
+      type: Types.ObjectId,
       required: true,
+      ref: "category",
     },
-    customId: String,
+    customId: {
+      type: String, 
+      required: true,
+      unique: true,
+    },
   },
-  {
-    toObject: { virtuals: true }, // for res.json()
-    toJSON: { virtuals: true }, // for console.log()
-    timestamps: true,
-  },
-)
-//======================================== Vitruals ========================================
-subCategorySchema.virtual('Brands', {
-  ref: 'Brand',
-  foreignField: 'subCategoryId',
-  localField: '_id',
-  // justOne: true,
-})
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
+SubCategorySchema.virtual("brand", {
+  ref: "brand",
+  foreignField: "subCategoryID",
+  localField: "_id",
+});
+const SubCategoryModel = model("subcategory", SubCategorySchema);
 
-export const subCategoryModel = model('subCategory', subCategorySchema)
+export default SubCategoryModel;
