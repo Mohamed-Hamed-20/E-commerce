@@ -4,7 +4,7 @@ const app = express();
 
 //connect with config.env
 import dotenv from "dotenv";
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({ path: ".env" });
 //application
 
 bootstrap(app, express);
