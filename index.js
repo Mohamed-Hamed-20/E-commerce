@@ -6,5 +6,7 @@ const app = express();
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 //application
-
+if (process.env.MODE == "development") {
+  app.use(morgan("dev"));
+}
 bootstrap(app, express);
