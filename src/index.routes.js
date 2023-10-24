@@ -53,6 +53,6 @@ export const bootstrap = (app, express) => {
 
   //API bad
   app.all("*", (req, res) => res.send("invalid router link or method!"));
-  const port = parseInt(process.env.port) || 8000;
+  const port = parseInt(process.env.port) || 7102;
   app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 };
